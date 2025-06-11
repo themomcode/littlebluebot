@@ -1,1 +1,139 @@
+{% extends "base.html" %}
 
+{% block title %}Dashboard - Legal Document Generator{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="card mb-4">
+            <div class="card-body text-center">
+                <h1 class="card-title mb-3">
+                    <i class="fas fa-gavel text-primary me-2"></i>
+                    Legal Document Generator
+                </h1>
+                <p class="lead">AI-powered legal document creation using Google Gemini and Claude Sonnet</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-3 mb-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <i class="fas fa-file-alt fa-3x text-primary mb-3"></i>
+                <h3 class="card-title">{{ doc_count }}</h3>
+                <p class="card-text">Documents Uploaded</p>
+                <a href="/documents" class="btn btn-outline-primary">View All</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 mb-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <i class="fas fa-magic fa-3x text-success mb-3"></i>
+                <h3 class="card-title">{{ generated_count }}</h3>
+                <p class="card-text">Documents Generated</p>
+                <a href="/generated" class="btn btn-outline-success">View All</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 mb-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <i class="fas fa-upload fa-3x text-info mb-3"></i>
+                <h3 class="card-title">Upload</h3>
+                <p class="card-text">Add New Documents</p>
+                <a href="/upload" class="btn btn-info">Upload Now</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 mb-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <i class="fas fa-plus-circle fa-3x text-warning mb-3"></i>
+                <h3 class="card-title">Generate</h3>
+                <p class="card-text">Create New Document</p>
+                <a href="/generate" class="btn btn-warning">Generate Now</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if recent_docs %}
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-clock me-2"></i>Recent Uploads</h5>
+            </div>
+            <div class="card-body">
+                {% for doc in recent_docs %}
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <div>
+                        <strong>{{ doc.original_filename }}</strong>
+                        <small class="text-muted d-block">{{ doc.document_type or 'Unknown type' }}</small>
+                    </div>
+                    <small class="text-muted">{{ doc.created_at }}</small>
+                </div>
+                <hr>
+                {% endfor %}
+                <a href="/documents" class="btn btn-sm btn-outline-primary">View All Documents</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-star me-2"></i>Recent Generations</h5>
+            </div>
+            <div class="card-body">
+                {% if recent_generated %}
+                    {% for doc in recent_generated %}
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <div>
+                            <strong>{{ doc.title }}</strong>
+                            <small class="text-muted d-block">{{ doc.document_type }} - {{ doc.llm_provider }}</small>
+                        </div>
+                        <small class="text-muted">{{ doc.created_at }}</small>
+                    </div>
+                    <hr>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-muted">No documents generated yet.</p>
+                {% endif %}
+                <a href="/generated" class="btn btn-sm btn-outline-success">View All Generated</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title"><i class="fas fa-info-circle me-2"></i>Getting Started</h5>
+                <div class="row">
+                    <div class="col-md-4">
+                        <h6><i class="fas fa-upload text-primary me-2"></i>1. Upload Documents</h6>
+                        <p class="small">Upload your existing legal documents (PDF, DOCX, images) to build your document library.</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h6><i class="fas fa-cog text-success me-2"></i>2. Configure Generation</h6>
+                        <p class="small">Choose your AI model (Gemini or Claude), document type, and provide specific instructions.</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h6><i class="fas fa-download text-info me-2"></i>3. Generate & Download</h6>
+                        <p class="small">Generate new documents based on your library and download them for immediate use.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
